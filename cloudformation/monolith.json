@@ -8,253 +8,168 @@
         "EnableDnsHostnames": true,
         "InstanceTenancy": "default",
         "Tags": [
-          {
-            "Value": "laravel_demo_vpc",
-            "Key": "Name"
-          }
+          { "Value": "laravel_demo_vpc", "Key": "Name" }
         ]
       }
     },
+
     "InternetGateway": {
       "Type": "AWS::EC2::InternetGateway",
       "Properties": {
         "Tags": [
-          {
-            "Value": "laravel_demo_igw",
-            "Key": "Name"
-          }
+          { "Value": "laravel_demo_igw", "Key": "Name" }
         ]
       }
     },
+
     "InternetGatewayAttachment": {
       "Type": "AWS::EC2::VPCGatewayAttachment",
       "Properties": {
-        "VpcId": {
-          "Ref": "VPC"
-        },
-        "InternetGatewayId": {
-          "Ref": "InternetGateway"
-        }
+        "VpcId": { "Ref": "VPC" },
+        "InternetGatewayId": { "Ref": "InternetGateway" }
       }
     },
+
     "PublicSubnet1": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
-        "VpcId": {
-          "Ref": "VPC"
-        },
-        "AvailabilityZoneId": "euw2-az1",
+        "VpcId": { "Ref": "VPC" },
+        "AvailabilityZone": { "Fn::Select": [0, { "Fn::GetAZs": "" }] },
         "CidrBlock": "10.1.0.0/20",
         "MapPublicIpOnLaunch": true,
         "Tags": [
-          {
-            "Value": "laravel_demo_public_subnet_1",
-            "Key": "Name"
-          }
+          { "Value": "public_subnet_1", "Key": "Name" }
         ]
       }
     },
-    "PrivateSubnet1": {
-      "Type": "AWS::EC2::Subnet",
-      "Properties": {
-        "VpcId": {
-          "Ref": "VPC"
-        },
-        "AvailabilityZoneId": "euw2-az1",
-        "CidrBlock": "10.1.128.0/20",
-        "MapPublicIpOnLaunch": false,
-        "Tags": [
-          {
-            "Value": "laravel_demo_private_subnet_1",
-            "Key": "Name"
-          }
-        ]
-      }
-    },
+
     "PublicSubnet2": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
-        "VpcId": {
-          "Ref": "VPC"
-        },
-        "AvailabilityZoneId": "euw2-az1",
+        "VpcId": { "Ref": "VPC" },
+        "AvailabilityZone": { "Fn::Select": [1, { "Fn::GetAZs": "" }] },
         "CidrBlock": "10.1.16.0/20",
         "MapPublicIpOnLaunch": true,
         "Tags": [
-          {
-            "Value": "laravel_demo_public_subnet_2",
-            "Key": "Name"
-          }
+          { "Value": "public_subnet_2", "Key": "Name" }
         ]
       }
     },
+
+    "PrivateSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": { "Ref": "VPC" },
+        "AvailabilityZone": { "Fn::Select": [0, { "Fn::GetAZs": "" }] },
+        "CidrBlock": "10.1.128.0/20",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          { "Value": "private_subnet_1", "Key": "Name" }
+        ]
+      }
+    },
+
     "PrivateSubnet2": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
-        "VpcId": {
-          "Ref": "VPC"
-        },
-        "AvailabilityZoneId": "euw2-az1",
+        "VpcId": { "Ref": "VPC" },
+        "AvailabilityZone": { "Fn::Select": [1, { "Fn::GetAZs": "" }] },
         "CidrBlock": "10.1.144.0/20",
         "MapPublicIpOnLaunch": false,
         "Tags": [
-          {
-            "Value": "laravel_demo_private_subnet_2",
-            "Key": "Name"
-          }
+          { "Value": "private_subnet_2", "Key": "Name" }
         ]
       }
     },
+
     "PublicRouteTable": {
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
-        "VpcId": {
-          "Ref": "VPC"
-        },
+        "VpcId": { "Ref": "VPC" },
         "Tags": [
-          {
-            "Value": "laravel_demo_rtb_public",
-            "Key": "Name"
-          }
+          { "Value": "public_rtb", "Key": "Name" }
         ]
       }
     },
+
     "PublicRoute": {
       "Type": "AWS::EC2::Route",
       "Properties": {
-        "RouteTableId": {
-          "Ref": "PublicRouteTable"
-        },
+        "RouteTableId": { "Ref": "PublicRouteTable" },
         "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": {
-          "Ref": "InternetGateway"
-        }
+        "GatewayId": { "Ref": "InternetGateway" }
       }
     },
+
     "PublicSubnet1RouteTableAssociation": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
-        "RouteTableId": {
-          "Ref": "PublicRouteTable"
-        },
-        "SubnetId": {
-          "Ref": "PublicSubnet1"
-        }
+        "RouteTableId": { "Ref": "PublicRouteTable" },
+        "SubnetId": { "Ref": "PublicSubnet1" }
       }
     },
+
     "PublicSubnet2RouteTableAssociation": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
-        "RouteTableId": {
-          "Ref": "PublicRouteTable"
-        },
-        "SubnetId": {
-          "Ref": "PublicSubnet2"
-        }
+        "RouteTableId": { "Ref": "PublicRouteTable" },
+        "SubnetId": { "Ref": "PublicSubnet2" }
       }
     },
+
     "PrivateRouteTable": {
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
-        "VpcId": {
-          "Ref": "VPC"
-        }
+        "VpcId": { "Ref": "VPC" }
       }
     },
+
     "PrivateSubnet1RouteTableAssociation": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
-        "RouteTableId": {
-          "Ref": "PrivateRouteTable"
-        },
-        "SubnetId": {
-          "Ref": "PrivateSubnet1"
-        }
+        "RouteTableId": { "Ref": "PrivateRouteTable" },
+        "SubnetId": { "Ref": "PrivateSubnet1" }
       }
     },
+
     "PrivateSubnet2RouteTableAssociation": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
-        "RouteTableId": {
-          "Ref": "PrivateRouteTable"
-        },
-        "SubnetId": {
-          "Ref": "PrivateSubnet2"
-        }
+        "RouteTableId": { "Ref": "PrivateRouteTable" },
+        "SubnetId": { "Ref": "PrivateSubnet2" }
       }
     },
+
     "SecurityGroupSshHttpHttps": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "VpcId": {
-          "Ref": "VPC"
-        },
+        "VpcId": { "Ref": "VPC" },
         "GroupDescription": "Allow SSH, HTTP, HTTPS access.",
         "SecurityGroupIngress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "IpProtocol": "tcp",
-            "FromPort": 22,
-            "ToPort": 22
-          },
-          {
-            "CidrIp": "0.0.0.0/0",
-            "IpProtocol": "tcp",
-            "FromPort": 80,
-            "ToPort": 80
-          },
-          {
-            "CidrIp": "0.0.0.0/0",
-            "IpProtocol": "tcp",
-            "FromPort": 443,
-            "ToPort": 443
-          },
-          {
-            "CidrIp": "0.0.0.0/0",
-            "IpProtocol": "tcp",
-            "FromPort": 8000,
-            "ToPort": 8000
-          },
-          {
-            "CidrIp": "0.0.0.0/0",
-            "IpProtocol": "tcp",
-            "FromPort": 8001,
-            "ToPort": 8001
-          },
-          {
-            "CidrIp": "0.0.0.0/0",
-            "IpProtocol": "tcp",
-            "FromPort": 8002,
-            "ToPort": 8002
-          }
+          { "CidrIp": "0.0.0.0/0", "IpProtocol": "tcp", "FromPort": 22, "ToPort": 22 },
+          { "CidrIp": "0.0.0.0/0", "IpProtocol": "tcp", "FromPort": 80, "ToPort": 80 },
+          { "CidrIp": "0.0.0.0/0", "IpProtocol": "tcp", "FromPort": 443, "ToPort": 443 }
         ],
         "Tags": [
-          {
-            "Value": "laravel_demo_sg",
-            "Key": "Name"
-          }
+          { "Value": "laravel_demo_sg", "Key": "Name" }
         ]
       }
     },
+
     "EC2Instance": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "ImageId": "ami-080e1f13689e07408",
+        "ImageId": {
+          "Fn::Sub": "{{resolve:ssm:/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}"
+        },
         "InstanceType": "t2.micro",
         "KeyName": "laravel_demo",
-        "SubnetId": {
-          "Ref": "PublicSubnet1"
-        },
+        "SubnetId": { "Ref": "PublicSubnet1" },
         "SecurityGroupIds": [
-          {
-            "Ref": "SecurityGroupSshHttpHttps"
-          }
+          { "Ref": "SecurityGroupSshHttpHttps" }
         ],
         "Tags": [
-          {
-            "Value": "laravel_demo_ec2_instance",
-            "Key": "Name"
-          }
+          { "Value": "laravel_demo_ec2_instance", "Key": "Name" }
         ],
         "UserData": {
           "Fn::Base64": {
@@ -262,9 +177,10 @@
               "",
               [
                 "#!/bin/bash -ex\n",
-                "git clone https://github.com/rozmarin-2013/devops-laravel.git /usr/local/bin/devops\n",
-                "/usr/local/bin/devops/common/create_aliases.sh\n",
-                "source ~/.bashrc\n"
+                "apt update\n",
+                "apt install -y git\n",
+                "git clone https://github.com/rozmarin-2013/devops-laravel.git /opt/app\n",
+                "echo DONE\n"
               ]
             ]
           }
