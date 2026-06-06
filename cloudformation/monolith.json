@@ -43,7 +43,7 @@
         "VpcId": {
           "Ref": "VPC"
         },
-        "AvailabilityZoneId": "use1-az4",
+        "AvailabilityZoneId": "euw2-az1",
         "CidrBlock": "10.1.0.0/20",
         "MapPublicIpOnLaunch": true,
         "Tags": [
@@ -60,7 +60,7 @@
         "VpcId": {
           "Ref": "VPC"
         },
-        "AvailabilityZoneId": "use1-az4",
+        "AvailabilityZoneId": "euw2-az1",
         "CidrBlock": "10.1.128.0/20",
         "MapPublicIpOnLaunch": false,
         "Tags": [
@@ -77,7 +77,7 @@
         "VpcId": {
           "Ref": "VPC"
         },
-        "AvailabilityZoneId": "use1-az6",
+        "AvailabilityZoneId": "euw2-az2",
         "CidrBlock": "10.1.16.0/20",
         "MapPublicIpOnLaunch": true,
         "Tags": [
@@ -94,7 +94,7 @@
         "VpcId": {
           "Ref": "VPC"
         },
-        "AvailabilityZoneId": "use1-az6",
+        "AvailabilityZoneId": "euw2-az2",
         "CidrBlock": "10.1.144.0/20",
         "MapPublicIpOnLaunch": false,
         "Tags": [
@@ -239,8 +239,8 @@
     "EC2Instance": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "ImageId": "ami-080e1f13689e07408",
-        "InstanceType": "t2.micro",
+        "ImageId": "{{resolve:ssm:/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
+        "InstanceType": "t3.micro",
         "KeyName": "laravel_demo",
         "SubnetId": {
           "Ref": "PublicSubnet1"
@@ -252,7 +252,7 @@
         ],
         "Tags": [
           {
-            "Value": "laravel_demo_ec2_instance",
+            "Value": "laravel_demo_ec2_instance_1",
             "Key": "Name"
           }
         ],
@@ -264,7 +264,7 @@
                 "#!/bin/bash -ex\n",
                 "git clone https://github.com/rcravens/devops-laravel.git /usr/local/bin/devops\n",
                 "/usr/local/bin/devops/common/create_aliases.sh\n",
-                "source ~/.bashrc\n",
+                "source ~/.bashrc\n"
               ]
             ]
           }
